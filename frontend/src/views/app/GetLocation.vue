@@ -50,13 +50,8 @@ export default {
   // 지도 API 가져오기
   mounted: async function() {
     window.kakao && window.kakao.maps ? this.initMap() : this.addScript();
-
     navigator.geolocation.getCurrentPosition(this.success, this.fail);
-
-
     this.userLocation.userId = JSON.parse(localStorage.getItem('Login-token'))["user-id"]
-
-
 
     //navigator 객체를 이용해 현재 위치를 받아온다.
     // navigator.geolocation.getCurrentPosition(this.success, this.fail);
@@ -80,8 +75,7 @@ export default {
       this.lng = location.coords.longitude; //경도
       this.location.lat = this.lat;
       this.location.lng = this.lng;
-
-      console.log(this.lat, this.lng);
+      // console.log(this.lat, this.lng);
     },
     fail(msg) {
       // 실패 시 PositionError 객체가 콜백함수에 전달된다.
@@ -137,28 +131,28 @@ export default {
     addScript() {
       const script = document.createElement('script'); /* global kakao */
       script.onload = () => kakao.maps.load(this.initMap);
-      script.src = `http://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${MAP_API_KEY}&libraries=services`;
+      script.src = `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${MAP_API_KEY}&libraries=services`;
       document.head.appendChild(script);
     },
     addUserAddress: function () {
       const userInfo = JSON.parse(localStorage.getItem('Login-token'))
-      userInfo.user_address =  "1168064000"
+      userInfo.user_address =  "1168065000"
       userInfo.user_address_name = "역삼2동"
       localStorage.setItem("Login-token", JSON.stringify(userInfo));
 
-      this.userLocation.addressCode = "1168064000"
+      this.userLocation.addressCode = "1168065000"
       this.userLocation.addressName = "역삼2동"
       axios
         .post(`${SERVER_URL}/user/address`, this.userLocation )
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
+          // console.log(response.data);
           location.replace('/home')
           // window.location.reload(true);
           // this.$router.push({ name: 'Home'});
 
         })
-        .catch((response) => {
-          console.log(response);
+        .catch((err) => {
+          console.log(err);
         });
     }, 
     createUserAddress: function() {
@@ -174,15 +168,15 @@ export default {
       // localStorage.setItem("auth-token",response.data["auth-token"]);
       axios
         .post(`${SERVER_URL}/user/address`, this.userLocation )
-        .then((response) => {
-          console.log(response.data);
+        .then(() => {
+          // console.log(response.data);
           location.replace('/home')
           // window.location.reload(true);
           // this.$router.push({ name: 'Home'});
 
         })
-        .catch((response) => {
-          console.log(response);
+        .catch((err) => {
+          console.log(err);
         });
     },
     relocation: function () {

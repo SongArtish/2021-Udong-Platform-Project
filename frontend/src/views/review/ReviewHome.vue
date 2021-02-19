@@ -18,50 +18,47 @@
             <b-icon icon="search" variant="black" @click="FindStore"/>
           </span>
         </div>
+        <b-button id="ReviewHomeTip" class="ml-3" pill size="sm" variant="transparent" style="color: #695549;">검색팁</b-button>
+        <b-tooltip target="ReviewHomeTip">카테고리, 상점명 등을 검색해보세요!</b-tooltip>
       </b-col>
       
     </b-row>
     <!-- 게시글 작성을 위한 버튼 -->
-    <b-row>
-      <b-col offset="8" @click="CreateReview">
-        리뷰작성<b-button pill variant="transparent" class="font-weight-bold" size="lg">+</b-button>
-      </b-col>
-    </b-row>
     <hr class="mb-5">
     <!-- 2. 추천 카테고리 -->
     <!-- for문으로 출력한다!!! -->
-      <div>
-        <b-row align-h="center">
-          <b-card-group deck style="width: 80%;">
-            <CategoryCard/>
-            <CategoryCard/>
-            <CategoryCard/>
-          </b-card-group>
-        </b-row>
-        <b-row align-h="center">
-          <b-card-group deck style="width: 80%;">
-            <CategoryCard/>
-            <CategoryCard/>
-            <CategoryCard/>
-          </b-card-group>
-        </b-row>
-        <b-row align-h="center">
-          <b-card-group deck style="width: 80%;">
-            <CategoryCard/>
-            <CategoryCard/>
-            <CategoryCard/>
-          </b-card-group>
-        </b-row>
-   
-      </div>
+    <div>
+      <b-row align-h="center" >
+        <b-card-group deck style="width: 75%;">
+          <CategoryCard category="리뷰 많은 상점"/>
+          <CategoryCard category="패스트푸드"/>
+          <CategoryCard category="호프/맥주"/>
+        </b-card-group>
+      </b-row>
+      <b-row align-h="center">
+        <b-card-group deck style="width: 75%;">
+          <CategoryCard category="커피전문점/카페/다방"/>
+          <CategoryCard category="수퍼마켓"/>
+          <CategoryCard category="후라이드/양념치킨"/>
+        </b-card-group>
+      </b-row>
+      <b-row align-h="center">
+        <b-card-group deck style="width: 75%;">
+          <CategoryCard category="편의점"/>
+          <CategoryCard category="라면김밥분식"/>
+          <CategoryCard category="호텔/콘도"/>
+        </b-card-group>
+      </b-row>
+    </div>
   </div>
 </template>
 
 
 <script>
 import CategoryCard from '@/components/review/CategoryCard'
-
 const userInfo = JSON.parse(localStorage.getItem('Login-token'))
+import axios from 'axios';
+const SERVER_URL = process.env.VUE_APP_SERVER_URL;
 
 export default {
   name: 'ReviewHome',
@@ -79,7 +76,12 @@ export default {
         backgroundImage: "url(https://picsum.photos/250/250/?image=9)",
       },
       },
+      bestStoreList : {},
+      bestCtgList : [],
     };
+  },
+  async mounted() {
+   // await this.search();
   },
   methods: {
     FindStore: function () {
@@ -91,6 +93,22 @@ export default {
     },
       CreateReview: function () {
       this.$router.push({ name: 'GetStore', params: {address : this.storeParamDto.dongcode}})
+    },
+    search: function() {
+      console.log(this.storeParamDto.dongcode);
+      axios
+        .get(`${SERVER_URL}/store/beststore/` + `${this.storeParamDto.dongcode}`)
+        .then((response) => {
+          // console.log(response.data);
+          this.bestCtgList = response.data;
+          // console.log("res",this.bestCtgList);
+          // if(this.getSearchStoreList!=null){
+          //   window.kakao && window.kakao.maps ? this.initMap() : this.addScript();
+          // }
+        })
+        .catch(() => {
+          console.log('fail');
+        });
     },
     
   }

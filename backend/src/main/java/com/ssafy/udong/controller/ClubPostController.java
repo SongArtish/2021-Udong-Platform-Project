@@ -61,6 +61,7 @@ public class ClubPostController {
 	private ResponseEntity<String> createClubPost(ClubPostDto clubPostDto,
 			@RequestParam(value = "file", required = false) MultipartFile[] files) {
 		System.out.println("그룹게시판");
+		System.out.println(clubPostDto.getClubId());
 		int result = service.createClubPost(clubPostDto, files);
 
 		if (result == SUCCESS) {
@@ -88,8 +89,8 @@ public class ClubPostController {
 
 	@ApiOperation(value = "검색어를 포함하는 그룹 게시물 조회", notes = "그룹 게시물로 작성한 모든 글 중 검색어를 포함하는 글을 조회합니다.\n" + "## 필수값\n"
 			+ " - searchWord : 검색어\n" + " - limit : 한 페이지에 노출될 게시글 수\n" + " - offset : 오프셋\n")
-	@GetMapping(value = "/{searchWord}")
-	private ResponseEntity<ClubPostResultDto> selectClubPostBySearchWord(@PathVariable String searchWord,
+	@GetMapping(value = "/word")
+	private ResponseEntity<ClubPostResultDto> selectClubPostBySearchWord(@RequestParam(value="searchWord") String searchWord,
 			@RequestParam(value = "limit") int limit, @RequestParam(value = "offset") int offset) {
 
 		ClubPostResultDto clubPostResultDto;
@@ -122,8 +123,8 @@ public class ClubPostController {
 
 	@ApiOperation(value = "그룹 별 검색어를 포함하는 게시물 조회", notes = "그룹 내에 작성된 모든 중 검색어를 포함하는 글을 조회합니다.\n" + "## 필수값\n"
 			+ " - clubId : 그룹 아이디\n" + " - searchWord : 검색어\n" + " - limit : 한 페이지에 노출될 게시글 수\n" + " - offset : 오프셋\n")
-	@GetMapping(value = "/club/{searchWord}")
-	private ResponseEntity<ClubPostResultDto> selectClubPostByClubIdAndSearchWord(@PathVariable String searchWord,
+	@GetMapping(value = "/club/word")
+	private ResponseEntity<ClubPostResultDto> selectClubPostByClubIdAndSearchWord(@RequestParam(value="searchWord") String searchWord,
 			@RequestParam(value = "clubId") String clubId, @RequestParam(value = "limit") int limit,
 			@RequestParam(value = "offset") int offset) {
 
@@ -158,8 +159,8 @@ public class ClubPostController {
 	@ApiOperation(value = "유저 별 검색어를 포함하는그룹 게시물 조회", notes = "한 명의 유저가 그룹 게시물로 작성한 글 중 검색어를 포함하는 글을 조회합니다.\n"
 			+ "## 필수값\n" + " - userId : 유저 아이디\n" + " - searchWord : 검색어\n" + " - limit : 한 페이지에 노출될 게시글 수\n"
 			+ " - offset : 오프셋\n")
-	@GetMapping(value = "/user/{searchWord}")
-	private ResponseEntity<ClubPostResultDto> selectClubPostByUserId(@PathVariable String searchWord,
+	@GetMapping(value = "/user/word")
+	private ResponseEntity<ClubPostResultDto> selectClubPostByUserId(@RequestParam(value="searchWord") String searchWord,
 			@RequestParam(value = "userId") String userId, @RequestParam(value = "limit") int limit,
 			@RequestParam(value = "offset") int offset) {
 
@@ -206,8 +207,8 @@ public class ClubPostController {
 	// 글 삭제
 	@ApiOperation(value = "게시 글 삭제", notes = "그룹의 게시판에 노출되는 글을 삭제합니다.\n" + "## 필수값\n" + " - postId : 삭제할 게시글 아이디\n")
 	@DeleteMapping
-	private ResponseEntity<String> deleteClubPost(@RequestBody ClubPostDto clubPostDto) {
-		int result = service.deleteClubPost(clubPostDto.getPostId());
+	private ResponseEntity<String> deleteClubPost(@RequestParam("clubId") String clubId) {
+		int result = service.deleteClubPost(clubId);
 
 		if (result == SUCCESS) {
 			return new ResponseEntity<String>("글 삭제 성공", HttpStatus.OK);
@@ -359,8 +360,8 @@ public class ClubPostController {
 		System.out.println("다운로드" +fileId);
 		List<String> url = clubService.selectFileUrl(fileId);
 		System.out.println("가져온 url:" +url.get(0));
-		System.out.println("./uploads/clubpost/"+url.get(0).substring(17));
-		String madeUrl = "./uploads/clubpost/"+url.get(0).substring(17);	
+		System.out.println("./uploads/clubPost/"+url.get(0).substring(17));
+		String madeUrl = "./uploads/clubPost/"+url.get(0).substring(17);	
 		Path path = Paths.get(madeUrl);
 			
 		String contentType = Files.probeContentType(path);

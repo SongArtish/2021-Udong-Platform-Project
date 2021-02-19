@@ -1,7 +1,9 @@
 <template>
   <div id="app" class="pb-5">  
     <div v-if="login"><Navbar /></div>
-    <router-view></router-view>   
+    <div>
+      <router-view ></router-view>
+    </div>   
   </div>
 </template>
 
@@ -12,7 +14,7 @@ import 'vue-select/dist/vue-select.css';
 export default {
   name: 'App',
   components: {
-     Navbar,
+    Navbar,
   },
   data: function () {
     return {
@@ -38,6 +40,7 @@ export default {
 /* 3번 폰트 - Hanna */
 @import url(//fonts.googleapis.com/earlyaccess/hanna.css);
 
+@import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
 
 #app {
   font-family: 'Jeju Gothic', sans-serif;
@@ -70,12 +73,15 @@ export default {
 #box {
   display: block;
   width: 50%;
-  /* height: 50%; */
   position: absolute;
   left: 25%;
-  margin-top: 5%;
+  margin-top: 0%;
   padding-bottom: 7%;
 }
 
+#top_title {
+  color: #695549;
+  font-family: 'Nanum Pen Script', cursive;
+}
 
 </style>

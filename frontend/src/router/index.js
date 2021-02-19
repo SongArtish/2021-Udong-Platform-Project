@@ -37,8 +37,8 @@ import ReviewList from '@/views/review/ReviewList.vue'
 //스토리
 
 import ArticleCreate from '@/views/story/ArticleCreate.vue'
-import ArticleDetail from '@/views/story/ArticleDetail.vue'
-import ArticleUpdate from '@/views/story/ArticleUpdate.vue'
+//import ArticleDetail from '@/views/story/ArticleDetail.vue'
+//import ArticleUpdate from '@/views/story/ArticleUpdate.vue'
 
 import GroupCreate from '@/views/story/GroupCreate.vue'
 import GroupList from '@/views/story/GroupList.vue'
@@ -126,12 +126,12 @@ const routes = [
     component: Developers,
   },
   {
-    path: '/location/first',
+    path: '/location',
     name: 'FindLocation',
     component: FindLocation,
   },
   {
-    path: '/location',
+    path: '/location/first',
     name: 'GetLocation',
     component: GetLocation,
   }, 
@@ -161,41 +161,31 @@ const routes = [
   },
 
   {
-    path: '/review/create/:storeId',
+    path: '/reviews/create/:storeId',
     name: 'ReviewCreate',
     component: ReviewCreate,
   },
   {
-    path: '/review/detail/:storeId',
+    path: '/reviews/detail/:storeId',
     name: 'ReviewDetail',
     component: ReviewDetail,
   },
   {
-    path: '/review',
+    path: '/reviews',
     name: 'ReviewHome',
     component: ReviewHome,
   },
   {
-    path: '/review/:category',
+    path: '/reviews/:category',
     name: 'ReviewList',
     component: ReviewList,
   },
 
   //스토리
   {
-    path: '/story/:address/article',
+    path: '/story/:address/article/:groupId/:groupcheck', // 뉴스피드에서 게시물작성과 그룹에서 게시물작성시 구분(groupcheck)
     name: 'ArticleCreate',
-    component: ArticleCreate,
-  },
-  {
-    path: '/story/:address/article/:userId/:groupId',
-    name: 'ArticleDetail',
-    component: ArticleDetail,
-  },
-  {
-    path: '/story/:address/article/:userId/:groupId/update',
-    name: 'ArticleUpdate',
-    component: ArticleUpdate,
+    component: ArticleCreate, 
   },
 
   {
@@ -209,7 +199,7 @@ const routes = [
     component: GroupList,
   },
   {
-    path: '/story/:address/group/:groupId/member',
+    path: '/story/:address/group/:groupId/member/:groupcheck', //  관리자 1 가입자 0 
     name: 'GroupMemberList',
     component: GroupMemberList,
   },
@@ -219,7 +209,7 @@ const routes = [
     component: GroupPage,
   },
   {
-    path: '/story/:address/group/:groupId/profile',
+    path: '/story/:address/group/:groupId/profile/:groupcheck', //  groupcheck -> 관리자2  비가입자 0 가입자 1
     name: 'GroupProfile',
     component: GroupProfile,
   },
@@ -230,7 +220,7 @@ const routes = [
   },
 
   {
-    path: '/story/:userId',
+    path: '/story/feed/:userId/:nickname',
     name: 'MyFeed',
     component: MyFeed,
   },

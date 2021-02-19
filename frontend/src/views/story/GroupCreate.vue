@@ -18,8 +18,8 @@
         </b-row> -->
         <b-row class="mb-3" align-h="center">
           <toggle-button
-            @change="valueTogle()"
-            :value="false"
+            @change="toggleValue()"
+            :value="true"
             :width="80"
             :height="35"
             :labels="{ checked: '공개', unchecked: '비공개' }"
@@ -130,7 +130,7 @@ export default {
     return {
       user: "",
       // props or 함수로 받아와야 한다!
-      dong: "역삼동",
+      dong: '역삼2동',
       club: {
         userId : "",
         areaCode : "",
@@ -155,14 +155,13 @@ export default {
     this.club.areaCode = JSON.parse(localStorage.getItem('Login-token'))['user_address'];
   },
   methods: {
-    valueTogle(){
-       console.log("처음값 : "+ this.club.isOpen)
+    toggleValue(){
         if(this.club.isOpen == 1){
           this.club.isOpen = "0";
         }else{
            this.club.isOpen = "1";
         }
-        console.log("바뀐값 : "+ this.club.isOpen)
+     
     },
     previewImage(event) {
       var input = event.target;
@@ -194,6 +193,8 @@ export default {
     createGroup: function() {
       if (this.club.clubName.length > 5 || this.club.clubContent.length < 5 || !this.verification) {
         alert("입력하신 정보를 확인해주세요! \n소개글은 5자 이상 작성하셔야 합니다!")
+      } else if (this.fileId == null) {
+        alert("그룹 이미지를 업로드 해주세요!")
       } else {
         var formData = new FormData();
         formData.append('userId', this.club.userId)
@@ -204,7 +205,7 @@ export default {
         formData.append('file', this.fileId)
         //formData.append('file', this.fileId[1])
         // formData.append('club', this.club)
-        console.log(formData);
+        // console.log(formData);
       // if (this.verification) {
           axios.post(`${SERVER_URL}/club`, formData, 
           { headers: { "Content-Type": `application/json; charset=UTF-8`}
@@ -224,7 +225,7 @@ export default {
       }
     },
     verifyName: function() {
-      if (this.club.clubName > 5) {
+      if (this.club.clubName.length > 5) {
         alert("그룹명을 5자 이내로 작성해주세요!")
       }
       else {
@@ -232,10 +233,12 @@ export default {
         axios
           .get(`${SERVER_URL}/club/${this.club.clubName}/${this.dongcode}`)
           .then(() => {
+          
             this.isVerified = true;
           })
           .catch((err) => {
             console.log(err);
+            alert("중복된 그룹명입니다. 다시작성 바랍니다.")
             this.isVerified = false;
           });
       }

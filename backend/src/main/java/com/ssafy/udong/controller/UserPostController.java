@@ -60,6 +60,8 @@ public class UserPostController {
 	@PostMapping
 	private ResponseEntity<String> createUserPost(UserPostDto userPostDto,
 			@RequestParam(value = "file", required = false) MultipartFile[] files)throws NullPointerException {
+		System.out.println("qweqweqe");
+		System.out.println(userPostDto.getAreaCode());
 		int result = service.createUserPost(userPostDto, files);
 	
 		if( result == SUCCESS ) {	
@@ -72,10 +74,11 @@ public class UserPostController {
 	@ApiOperation(value = "유저 글 조회", notes = "사용자가 개인 피드에 작성한 모든 글을 조회하여 반환합니다.\n" +
 			"## 필수값\n" + " - limit : 한 페이지에 노출될 게시글 수\n" + " - offset : 오프셋\n")
 	@GetMapping
-	private ResponseEntity<UserPostResultDto> selectAllUserPost(@RequestParam(value="limit") int limit, @RequestParam(value="offset") int offset){
-		UserPostResultDto userPostResultDto = service.selectAllUserPost(limit, offset);
+	private ResponseEntity<UserPostResultDto> selectAllUserPost(@RequestParam(value="limit") int limit, @RequestParam(value="offset") int offset, @RequestParam(value="areaCode") String areaCode){
+		UserPostResultDto userPostResultDto = service.selectAllUserPost(limit, offset,areaCode);
 
 		if( userPostResultDto.getResult() == SUCCESS ) {
+			System.out.println("asdasdaddasd");
 			return new ResponseEntity<UserPostResultDto>(userPostResultDto, HttpStatus.OK);
 		}else {
 			return new ResponseEntity<UserPostResultDto>(userPostResultDto, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -150,8 +153,7 @@ public class UserPostController {
 	@ApiOperation(value = "유저 글 삭제", notes = "유저의 개인 피드에 노출되는 글을 삭제합니다.\n" +
 			"## 필수값\n" + " - postId : 삭제할 게시글 아이디\n")
 	@DeleteMapping
-	private ResponseEntity<String> deleteUserPost(@RequestBody UserPostParamDto userPostParamDto){
-		String postId = String.valueOf(userPostParamDto.getPostId());
+	private ResponseEntity<String> deleteUserPost(@RequestParam String postId){
 		int result = service.deleteUserPost(postId);
 
 		if( result == SUCCESS ) {
@@ -303,8 +305,10 @@ public class UserPostController {
 		System.out.println("다운로드" +fileId);
 		List<String> url = clubService.selectFileUrl(fileId);
 		System.out.println("가져온 url:" +url.get(0));
-		System.out.println("./uploads/userpost/"+url.get(0).substring(17));
-		String madeUrl = "./uploads/userpost/"+url.get(0).substring(17);
+//		System.out.println("/home/ec2-user/0218/uploads/userPost/"+url.get(0).substring(17));
+//		String madeUrl = "/home/ec2-user/0218/uploads/userPost/"+url.get(0).substring(17);
+		System.out.println("./uploads/userPost/"+url.get(0).substring(17));
+		String madeUrl = "./uploads/userPost/"+url.get(0).substring(17);
 		Path path = Paths.get(madeUrl);
 			
 		String contentType = Files.probeContentType(path);

@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.udong.dto.BadgeDto;
 import com.ssafy.udong.dto.UserDto;
 import com.ssafy.udong.dto.UserParamDto;
 import com.ssafy.udong.service.EmailService;
@@ -44,6 +45,7 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+
 	
 	@Autowired
 	private EmailService emailService;
@@ -77,6 +79,7 @@ public class UserController {
 				resultMap.put("is-manager", loginUser.getIsManager());
 				resultMap.put("user_address", "1111");
 				resultMap.put("user_address_name", "동이름");
+				resultMap.put("user_badge", "뱃지");
 				// resultMap.put("status", true);
 				// resultMap.put("data", loginUser);
 				status = HttpStatus.ACCEPTED;
@@ -137,6 +140,7 @@ public class UserController {
 	@PostMapping
 	public ResponseEntity<String> insertUser(@RequestBody UserDto userDto) throws Exception {
 		int result = userService.insertUser(userDto);
+		int result2 = userService.insertBadge(userDto.getUserId(), "1");
 		if (result == SUCCESS) {
 			return new ResponseEntity<String>("회원가입 성공", HttpStatus.OK);
 		} else {
@@ -233,6 +237,7 @@ public class UserController {
 	public ResponseEntity<String> selectDuplicateEmail(@RequestBody UserDto userDto) throws Exception {
 		System.out.println(userDto.getEmail());
 		String result = userService.selectDuplicateEmail(userDto.getEmail());
+		System.out.println(result);
 		if (result != null) { // 이메일이 이미 있으면
 			return new ResponseEntity<String>("현재 사용중인 이메일입니다.\n", HttpStatus.INTERNAL_SERVER_ERROR);
 		} else { // 이메일이 없으면
@@ -244,9 +249,9 @@ public class UserController {
 	@ApiOperation(value = "인증 메일 일치 확인", notes = "인증을 위해 발송한 이메일 코드가 알맞는지 확인합니다.\n" +
 			"## 필수값\n" + " - code : 인증 메일로 발송한 코드\n")
 
-	@PostMapping("/email/{code}")
-	public ResponseEntity<String> checkDuplicateEmail(@PathVariable String code) throws Exception {
-		int result = emailService.gmailCheck(code);
+	@PostMapping("/email/{userId}/{code}")
+	public ResponseEntity<String> checkDuplicateEmail(@PathVariable String code, @PathVariable String userId) throws Exception {
+		int result = emailService.gmailCheck(userId,code);
 		if (result == SUCCESS) { // 코드가 일치하면
 			return new ResponseEntity<String>("인증 완료.\n", HttpStatus.OK);
 		} else { // 코드가 불일치하면
@@ -265,6 +270,59 @@ public class UserController {
 			return new ResponseEntity<String>("주소 등록 성공", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<String>("주소 등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ApiOperation(value = "뱃지 추가", notes = "획득한 뱃지를 추가합니다..\n")
+	@PostMapping("/badge")
+	public ResponseEntity<String> insertBadge(@RequestParam(value="userId") String userId,@RequestParam(value="badgeId") String badgeId) throws Exception {
+
+		int result = userService.insertBadge(userId, badgeId);
+
+		if (result == SUCCESS) {// 아이디 비밀번호가있으면 ok
+			return new ResponseEntity<String>("뱃지 등록 성공", HttpStatus.OK);
+		} else { // 아이디비밀번호가없으면 fail
+			return new ResponseEntity<String>("뱃지 등록 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ApiOperation(value = "뱃지 삭제", notes = "뱃지를 삭제합니다..\n")
+	@DeleteMapping("/badge")
+	public ResponseEntity<String> deleteBadge(@RequestParam(value="userId") String userId,@RequestParam(value="badgeId") String badgeId) throws Exception {
+
+		int result = userService.deleteBadge(userId, badgeId);
+
+		if (result == SUCCESS) {// 아이디 비밀번호가있으면 ok
+			return new ResponseEntity<String>("뱃지 삭제 성공", HttpStatus.OK);
+		} else { // 아이디비밀번호가없으면 fail
+			return new ResponseEntity<String>("뱃지 삭제 실패", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@ApiOperation(value = "뱃지 조회", notes = "뱃지를 조회합니다..\n")
+	@GetMapping("/badge")
+	public ResponseEntity<List<BadgeDto>> selectBadge(@RequestParam(value="userId") String userId) throws Exception {
+		System.out.println(userId);
+
+		List<BadgeDto> list = userService.selectBadge(userId);
+
+		return new ResponseEntity<List<BadgeDto>>(list, HttpStatus.OK);
+
+		
+	}
+	
+	@ApiOperation(value = "메인 벳지 업데이트", notes = "뱃지를 업데이트 합니다..\n")
+	@PutMapping("/badge")
+	public ResponseEntity<String> updateBadge(@RequestParam String userId, @RequestParam String badgeId) throws Exception {
+		System.out.println(badgeId);
+		System.out.println(userId);
+
+		int result = userService.updateBadge(userId, badgeId);
+
+		if (result == SUCCESS) {// 아이디 비밀번호가있으면 ok
+			return new ResponseEntity<String>("뱃지 업데이트 성공", HttpStatus.OK);
+		} else { // 아이디비밀번호가없으면 fail
+			return new ResponseEntity<String>("뱃지 업데이트 실패", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	

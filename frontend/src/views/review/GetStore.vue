@@ -1,19 +1,21 @@
 <template>
   <div id="box">
     <h4 class="mb-3" style="font-family: 'Hanna', sans-serif;">우리 동네 장소를 검색해보세요!</h4>
-    <b-row>
-      <b-col offset="3">
-        <b-form-input
+        <input
+          type="text"
+          pill
           class="active-cyan-2 active-purple-2 mt-0 mb-3"
           placeholder="상점의 종류 혹은 상점명을 입력하세요"
           v-model="storeParamDto.searchWord"
           @keypress.enter="search"
-          style="text-align: center; width: 65%;"
+          style="text-align: center; width: 40%;"
           autofocus
-        ></b-form-input>
-      </b-col>
-    </b-row>
-    <table class="table table-hover" striped hover style="background-color: #695549;">
+        >
+        <b-button class="ml-3" size="sm" style="background-color: #695549;" @click="search">검색</b-button>
+        <b-button id="GetStoreTip" class="ml-3" pill size="sm" variant="transparent" style="color: #695549;">검색팁</b-button>
+        <b-tooltip target="GetStoreTip">카테고리, 상점명 등을 검색해보세요!</b-tooltip>
+    <div v-if="getSearchStoreList.length > 0" style="overflow: auto; height: 650px;">
+      <table class="table table-hover" striped hover style="background-color: #695549;">
       <thead style="color: white;" class="small">
         <tr>
           <th>종류</th>
@@ -37,6 +39,22 @@
         </tr>
       </tbody>
     </table>
+    </div>
+
+
+    <div v-else class="mt-5 pt-5">
+        <img alt="Vue logo" src="@/assets/udonge.png" style="width: 10%" />
+        <br />
+        <h5 class="my-3">검색 결과가 없어요 ㅠㅠ</h5>
+        <div class="mb-2">
+          이런 검색어는 어떠세요?
+        </div>
+        <div>
+          <a class="mx-1">카페</a>
+          <a class="mx-1">독서실</a>
+          <a class="mx-1">편의점</a>
+        </div>
+      </div>
   </div>
 </template>
 
@@ -82,18 +100,13 @@ export default {
   
   methods: {
     search: function() {
-      console.log('search');
-      console.log(this.storeParamDto.searchWord);
-      console.log(this.storeParamDto.dongcode);
-      // 상점 조회 axios 요청 보내기!!!!
-      // var params = new URLSearchParams();
-      // params.append("searchWord", this.storeParamDto.searchWord);
-      // params.append("dongcode", this.storeParamDto.dongcode);
+      // console.log('search');
+      // console.log(this.storeParamDto.dongcode);
 
       axios
       .post(`${SERVER_URL}/store/stores`, this.storeParamDto)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         this.getSearchStoreList = response.data;
       });
     },

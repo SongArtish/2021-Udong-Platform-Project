@@ -3,8 +3,8 @@
     <div id="border" class="my-5 py-5">
       <!-- 1. 제목 -->
       <div id="title" class="mb-5">
-        <span><img alt="Vue logo" src="@/assets/udonge.png" style="width: 10%"></span>
-        <span class="font-weight-bold " style="color: #695549;">주민등록</span>
+        <span><img alt="Vue logo" src="@/assets/udonge.png" style="width: 5%"></span>
+        <span class="font-weight-bold ml-2" style="color: #695549;">주민등록</span>
       </div>
       <!-- 2. 내용 -->
       <!-- 2.1 input창 -->
@@ -339,8 +339,8 @@ export default {
       }
     },
      check_user_email: function() {
-      if(this.credentials.email == "" || document.getElementById("error3").innerHTML != ""){
-        alert("이메일 다시 입력 바랍니다.")
+      if( this.checkId == false || this.checkNickname == false ||this.credentials.email == "" || document.getElementById("error3").innerHTML != ""){
+        alert("닉네임,아이디 중복체크 확인및 이메일 다시 입력 바랍니다.")
         this.credentials.email = "";
       }
       else{
@@ -365,7 +365,7 @@ export default {
       }
       else{
         axios
-          .post(`${SERVER_URL}/user/email/${this.emailCode}`)
+          .post(`${SERVER_URL}/user/email/${this.credentials.userId}/${this.emailCode}`)
           .then(() => {
             this.checkEmailCode = true;
             alert("인증완료");
