@@ -183,43 +183,6 @@ spring.mail.password= <Password>
 
 - :ballot_box_with_check: 페이지로 구성되면 `src/views` 폴더 안에, 컴포넌트로 활용되면 `src/components` 폴더 안에 배치하는 것을 원칙으로 한다.
 
-**FE 전체 파일트리 구조**
-
-![FE 파일트리](DOCS/img/FE_filetree1.png)
-
-![FE 파일트리](DOCS/img/FE_filetree2.png)
-
-**components 파일트리 구조**
-
-![컴포넌트 파일트리 구조](DOCS/img/components.png)
-
-**Views 파일트리 구조**
-
-![views 파일트리1](DOCS/img/views1.png)
-
-![views 파일트리2](DOCS/img/views2.png)
-
-### Backend
-
-**BE 전체 파일트리 구조**
-
-![BE 파일트리](DOCS/img/BE_filetree.png)
-
-**controller 파일트리**
-
-![BE 파일트리](DOCS/img/controller.png)
-
-**dao & dto 파일트리**
-
-![dao 파일트리](DOCS/img/dao.png)
-
-![dto 파일트리](DOCS/img/dto.png)
-
-**interceptor & service 파일트리**
-
-![interceptor & service 파일트리](DOCS/img/interceptor_service.png)
-
-
 
 ## 저작권 및 사용권 정보
 
