@@ -8,7 +8,23 @@
 
 
 
-## Intro
+## :gear: 기술스택
+
+- Frontend
+
+  - Vue.js
+  - HTML, CSS
+  - Bootstrap
+
+- Backend
+
+  - Java
+  - Spring Boot
+  - MySQL
+
+  
+
+## :pushpin: Intro
 
 > 2021년 SSAFY 2학기 공통프로젝트로 `우리동네`라는 커뮤니티를 개발하였다.
 >
@@ -36,7 +52,7 @@
 
 
 
-## 서비스 소개
+## :camera: 서비스 소개
 
 > `우동` 플랫폼에서는 크게 **리뷰, 소식, 이야기**의 3가지 세부서비스를 제공한다.
 >
